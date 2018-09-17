@@ -17,7 +17,7 @@ function deck(){
 
 	for(var s = 0; s < this.suits.length; s++){
 		for(var n = 0; n < this.names.length; n++){
-			if(n > 10)
+			if(n > 9)
 			{
 				cards.push(new card(10, this.names[n], this.suits[s]));
 			}else{
@@ -46,44 +46,62 @@ function playerMoves(playerCards, dealerCards){
 
 	let bust = 22;
 	playerHandValue = calculateHandValue(playerCards, "player");
-	dealerHandValue = calculateHandValue(dealerCards, "dealer");
 
 	while(playerHandValue < bust)
 	{
 		console.log(playerHandValue);
 
-		var userInput = prompt("Would you like to hit(h), stick(s) or fold(f)?")
+		var userInput = prompt("Would you like to hit(h), stick(s) or fold(f)?");
 		{
-			if(userInput === "h")
-			{
+			if(userInput === "h"){
 				var nextCard = deckOfCards.pop();
-				playerHand.push(nextCard);
+				playerCards.push(nextCard);
 				playerHandValue += nextCard.value;
 			}else if(userInput === "s")
 			{
-				if(playerHandValue > dealerHandValue)
-				{
-					console.log("You've won!");
-				}else{
-					console.log("Dealer wins, better luck next time!");
-				}
+				dealerMoves(dealerCards, playerHandValue);
 				break;
 			}
 		}
 	}
 }
 
+function dealerMoves(dealerCards, playersValue){
+
+	dealerHandValue = calculateHandValue(dealerCards, "dealer");
+
+	while(dealerHandValue < 17){
+		var nextCard = deckOfCards.pop();
+		dealerCards.push(nextCard);
+		dealerHandValue += nextCard.value;
+
+		if(dealerHandValue >= 17){
+			break;
+		}
+	}
+
+	if(playerHandValue > dealerHandValue){
+		console.log("You've won!");
+		}else{
+		console.log("Dealer wins, better luck next time!");
+		}
+}
+
 function calculateHandValue(cards, person){
 
-	if(person === "player")
-	{
+	let pValue = 0;
+	let dValue = 0;
+
+	if(person === "player"){
 		cards.forEach(function(card){
-			playerHandValue += card.value;
+			pValue += card.value;
 		});
+		return pValue;
 	}else{
 		cards.forEach(function(card){
-			dealerHandValue += card.value;
-		})
+			dValue += card.value;
+		});
+		return dValue;
 	}
 }
 
