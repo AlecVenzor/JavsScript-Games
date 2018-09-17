@@ -1,8 +1,8 @@
 const deckOfCards = deck();
-var playerHand = [];
-var dealerHand = [];
-var playerHandValue = 0;
-var dealerHandValue = 0;
+var playerHand = [],
+	dealerHand = [],
+	playerHandValue = 0,
+	dealerHandValue = 0;
 
 function card(value, name, suit){
 	this.value = value;
