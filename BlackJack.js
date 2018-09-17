@@ -1,59 +1,113 @@
-let handA= numberRole;
-let handB= numberRoleB;
-let cardTypeA =cardSelectorA();
-let cardTypeB= cardSelectorB();
+const deckOfCards = deck();
+var playerHand = [];
+var dealerHand = [];
+var playerHandValue = 0;
+var dealerHandValue = 0;
 
-funtion cardSelectorA()
-{
-/*rolls for card value*/
-let numberRole = Math.floor(Math.random() * 13) + 1;
-if (numberRole== 11)
-{
-	numberRole= 10;
-	return 'Jack';
-}
-else if(numberRole== 12)
-{
-	numberRole= 10;
-	return 'Queen';
-}
-else if(numberRole == 13)
-{
-	numberRole= 10;
-	return 'King';
-}
-else if (numberRole == 1)
-{      /* need to add choice between 1 or 1*/
-	numberRole= 10;
-	return 'Ace';
+function card(value, name, suit){
+	this.value = value;
+	this.name = name;
+	this.suit = suit;
 }
 
-}
-funtion cardSelectorB()
-{
-/*rolls for card value*/
-let numberRoleB = Math.floor(Math.random() * 13) + 1;
-if (numberRoleB== 11)
-{
-	numberRoleB= 10;
-	return 'Jack';
-}
-else if(numberRoleB== 12)
-{
-	numberRoleB= 10;
-	return 'Queen';
-}
-else if(numberRoleB == 13)
-{
-	numberRoleB= 10;
-	return 'King';
-}
-else if (numberRoleB == 1)
-{      /* need to add choice between 1 or 1*/
-	numberRoleB= 10;
-	return 'Ace';
+function deck(){
+	this.names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+	this.suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs'];
+	var cards = [];
+
+	for(var s = 0; s < this.suits.length; s++){
+		for(var n = 0; n < this.names.length; n++){
+			if(n > 10)
+			{
+				cards.push(new card(10, this.names[n], this.suits[s]));
+			}else{
+				cards.push( new card(n+1, this.names[n], this.suits[s]));
+			}
+		}
+	}
+
+	return cards;
 }
 
+function shuffle(deck){
+	//Uses Fisher-Yates shuffle method
+	let m = deck.length, i;
+
+	while(m){
+		i = Math.floor(Math.random() * m--);
+
+		[deck[m], deck[i]] = [deck[i], deck[m]];
+	}
+
+	return deck;
 }
 
+function playerMoves(playerCards, dealerCards)
+{
+	let bust = 22;
+	playerHandValue = calculatePlayerHandValue(playerCards);
+	dealerHandValue = calculateDealerHandValue(dealerCards)
 
+	while(playerHandValue < bust)
+	{
+		console.log(playerHandValue);
+
+		var userInput = prompt("Would you like to hit(h), stick(s) or fold(f)?")
+		{
+			if(userInput === "h")
+			{
+				var nextCard = deckOfCards.pop();
+				playerHand.push(nextCard);
+				playerHandValue += nextCard.value;
+			}else if(userInput === "s")
+			{
+				if(playerHandValue > dealerHandValue)
+				{
+					console.log("You've won!");
+				}else{
+					console.log("Dealer wins, better luck next time!");
+				}
+				break;
+			}
+		}
+	}
+}
+
+function calculatePlayerHandValue(cards)
+{
+	cards.forEach(function(card)
+	{
+		playerHandValue += card.value;
+	});
+
+	return playerHandValue;
+}
+
+function calculateDealerHandValue(cards)
+{
+	cards.forEach(function(card)
+	{
+		dealerHandValue += card.value;
+	});
+
+	return dealerHandValue;
+}
+
+function playGame()
+{
+	shuffle(deckOfCards);
+	playerHand.push(deckOfCards.pop());
+	playerHand.push(deckOfCards.pop());
+	dealerHand.push(deckOfCards.pop());
+	dealerHand.push(deckOfCards.pop());
+
+	var firstCard = document.querySelector("#firstCard");
+	var secondCard = document.querySelector("#secondCard");
+
+	firstCard.textContent = (playerHand[0].name + " of " + playerHand[0].suit);
+	secondCard.textContent = (playerHand[1].name + " of " + playerHand[1].suit);
+}
+
+playGame();
+
+playerMoves(playerHand, dealerHand);
