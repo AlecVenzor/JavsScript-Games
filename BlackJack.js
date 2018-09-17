@@ -44,14 +44,13 @@ function shuffle(deck){
 
 function playerMoves(playerCards, dealerCards){
 
-	let bust = 22;
 	playerHandValue = calculateHandValue(playerCards, "player");
 
-	while(playerHandValue < bust)
+	while(playerHandValue < 22)
 	{
 		console.log(playerHandValue);
 
-		var userInput = prompt("Would you like to hit(h), stick(s) or fold(f)?");
+		var userInput = prompt("Would you like to hit(h) or stand(s)?");
 		{
 			if(userInput === "h"){
 				var nextCard = deckOfCards.pop();
