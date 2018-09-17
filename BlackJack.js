@@ -42,11 +42,11 @@ function shuffle(deck){
 	return deck;
 }
 
-function playerMoves(playerCards, dealerCards)
-{
+function playerMoves(playerCards, dealerCards){
+
 	let bust = 22;
-	playerHandValue = calculatePlayerHandValue(playerCards);
-	dealerHandValue = calculateDealerHandValue(dealerCards)
+	playerHandValue = calculateHandValue(playerCards, "player");
+	dealerHandValue = calculateHandValue(dealerCards, "dealer");
 
 	while(playerHandValue < bust)
 	{
@@ -73,28 +73,22 @@ function playerMoves(playerCards, dealerCards)
 	}
 }
 
-function calculatePlayerHandValue(cards)
-{
-	cards.forEach(function(card)
-	{
-		playerHandValue += card.value;
-	});
+function calculateHandValue(cards, person){
 
-	return playerHandValue;
+	if(person === "player")
+	{
+		cards.forEach(function(card){
+			playerHandValue += card.value;
+		});
+	}else{
+		cards.forEach(function(card){
+			dealerHandValue += card.value;
+		})
+	}
 }
 
-function calculateDealerHandValue(cards)
-{
-	cards.forEach(function(card)
-	{
-		dealerHandValue += card.value;
-	});
+function playGame(){
 
-	return dealerHandValue;
-}
-
-function playGame()
-{
 	shuffle(deckOfCards);
 	playerHand.push(deckOfCards.pop());
 	playerHand.push(deckOfCards.pop());
