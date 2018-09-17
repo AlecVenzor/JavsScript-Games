@@ -44,11 +44,22 @@ function shuffle(deck){
 
 function playerMoves(playerCards, dealerCards){
 
-	playerHandValue = calculateHandValue(playerCards, "player");
+	playerHandValue = calculateHandValue(playerCards);
 
 	while(playerHandValue < 22)
 	{
 		console.log(playerHandValue);
+
+		if(playerCards.find(findAce)){
+			let aceChoice = prompt("You drew an Ace, do you want to use it as a 1 or 11?");
+			if(aceChoice ==="1"){
+                     break;   
+                }
+                else if(aceChoice === "11")
+                {
+                    playerHandValue += 10;
+                }            
+		}
 
 		var userInput = prompt("Would you like to hit(h) or stand(s)?");
 		{
@@ -56,6 +67,23 @@ function playerMoves(playerCards, dealerCards){
 				var nextCard = deckOfCards.pop();
 				playerCards.push(nextCard);
 				playerHandValue += nextCard.value;
+				if(nextCard.value === 1)
+                {
+                    let aceChoice = prompt("you drew an Ace, do you want to use it as a 1 or 11?");
+                    if(aceChoice ==="1")
+                    {
+                        break;
+                    }
+                    else if(aceChoice === "11")
+                    {
+                        playerHand += 10;
+                    }            
+                }
+				if(playerHandValue > 21)
+				{
+					console.log("You bust, dealer wins!");
+					break;
+				}
 			}else if(userInput === "s")
 			{
 				dealerMoves(dealerCards, playerHandValue);
@@ -67,14 +95,16 @@ function playerMoves(playerCards, dealerCards){
 
 function dealerMoves(dealerCards, playersValue){
 
-	dealerHandValue = calculateHandValue(dealerCards, "dealer");
+	dealerHandValue = calculateHandValue(dealerCards);
 
 	while(dealerHandValue < 17){
 		var nextCard = deckOfCards.pop();
 		dealerCards.push(nextCard);
 		dealerHandValue += nextCard.value;
 
-		if(dealerHandValue >= 17){
+		if(dealerHandValue > 21){
+			console.log("Dealer busts");
+			dealerHandValue = 0;
 			break;
 		}
 	}
@@ -84,6 +114,10 @@ function dealerMoves(dealerCards, playersValue){
 		}else{
 		console.log("Dealer wins, better luck next time!");
 		}
+}
+
+function findAce(card){
+	return card.value === 1;
 }
 
 function calculateHandValue(cards, person){
